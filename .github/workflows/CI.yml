@@ -23,7 +23,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-
       - name: Prepare config file
       - run: cp config.toml.example config.toml
 
