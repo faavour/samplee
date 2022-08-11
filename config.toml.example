@@ -1,0 +1,10 @@
+[[database]]
+    path=""
+
+[[discord]]
+    channel_id=""
+    token=""
+
+[[sender]]
+    endpoint=""
+    seed=""

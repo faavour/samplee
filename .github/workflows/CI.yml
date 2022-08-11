@@ -1,0 +1,85 @@
+name: CI
+on:
+    push:
+      
+#   workflow_dispatch:
+# env:
+#   IMAGE_NAME: discord-faucet
+
+jobs:
+  hadolint:
+    runs-on: ubuntu-20.04
+    name: "Hadolint"
+    steps:
+      - uses: actions/checkout@v2
+      - uses: jbergstroem/hadolint-gh-action@v1
+
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [14.x]
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Prepare config file
+      - run: cp config.toml.example config.toml
+
+      - name: Edit Config File
+      - uses: ciiiii/toml-editor@1.0.0
+        with:
+          file: "config.toml"
+          key: "database.path"
+          value: ${{ secrets.DATABASE_PATH }}
+      - uses: ciiiii/toml-editor@1.0.0
+        with:
+          file: "config.toml"
+          key: "discord.channel_id"
+          value: ${{ secrets.DISCORD_CHANNEL_ID }}
+      - uses: ciiiii/toml-editor@1.0.0
+        with:
+          file: "config.toml"
+          key: "discord.token"
+          value: ${{ secrets.DISCORD_TOKEN }}
+      - uses: ciiiii/toml-editor@1.0.0
+        with:
+          file: "config.toml"
+          key: "sender.endpoint"
+          value: ${{ secrets.SENDER_ENDPOINT }}
+      - uses: ciiiii/toml-editor@1.0.0
+        with:
+          file: "config.toml"
+          key: "sender.seed"
+          value: ${{ secrets.SENDER_SEED }}
+
+      - name: Yarn build
+      - uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - run: |
+          yarn install --frozen-lockfile
+          yarn cache clean
+          yarn build
+
+      - name: Login to DockerHub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Docker build and push
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          push: true
+          tags: ${{ github.actor }}/${{ env.IMAGE_NAME }}:${{ github.run_number }}
+
+      - name: Repository Dispatch
+        uses: peter-evans/repository-dispatch@v1
+        with:
+          token: ${{ secrets.PAT }}
+          repository: ${{ github.actor }}/discord-faucet
+          event-type: new-image
+          client-payload: '{"image": "${{ github.actor }}/${{ env.IMAGE_NAME }}:${{ github.run_number }}"}'
