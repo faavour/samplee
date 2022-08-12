@@ -2,9 +2,9 @@ name: CI
 on:
     push:
       
-#   workflow_dispatch:
-# env:
-#   IMAGE_NAME: discord-faucet
+  
+env:
+  IMAGE_NAME: discord-faucet
 
 jobs:
   hadolint:
