@@ -1,0 +1,13 @@
+version: '2'
+
+services:
+
+  discord-faucet:
+    build: .
+    image: discord-faucet
+
+    working_dir: /usr/src/app
+    restart: always
+
+    volumes: 
+    - ${PWD}/config.toml:/usr/src/app/config.toml
