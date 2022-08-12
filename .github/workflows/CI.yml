@@ -61,8 +61,17 @@ jobs:
           key: "sender.seed"
           value: ${{ secrets.SENDER_SEED }}
 
-      - name: Display toml file
-        run: cat config.toml
+      - name: Push toml file to server
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          port: ${{ secrets.SSH_PORT }}
+          password: ${{ secrets.SSH_KEY }}
+          
+          source: "config.toml"
+          # The path is based on the directory where the user logged into the server starts
+          target: "/tmp"
 
       - name: Yarn build
         # uses: actions/setup-node@v1
