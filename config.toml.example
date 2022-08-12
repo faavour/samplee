@@ -1,10 +1,10 @@
-[[database]]
+[database]
     path=""
 
-[[discord]]
+[discord]
     channel_id=""
     token=""
 
-[[sender]]
+[sender]
     endpoint=""
     seed=""
