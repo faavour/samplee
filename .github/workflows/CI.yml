@@ -22,9 +22,10 @@ jobs:
         node-version: [14.x]
 
     steps:
+      - uses: actions/checkout@v2
+
       - name: Prepare config file
-        uses: actions/checkout@v2
-        # run: cp config.toml.example config.toml
+        run: cp config.toml.example config.toml
 
       - name: Edit Config File-database-path
         uses: ciiiii/toml-editor@1.0.0
