@@ -64,8 +64,8 @@ jobs:
 
       - name: Yarn build
         # uses: actions/setup-node@v1
-        with:
-          node-version: ${{ matrix.node-version }}
+        # with:
+        #   node-version: ${{ matrix.node-version }}
         run: |
           yarn install --frozen-lockfile
           yarn cache clean
