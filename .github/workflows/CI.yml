@@ -61,8 +61,15 @@ jobs:
           key: "sender.seed"
           value: ${{ secrets.SENDER_SEED }}
 
-      - name: Push toml file to server
-        run: scp -i ${{ secrets.SSH_KEY }} config.toml ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:~/config.toml
+      - name: copy file via ssh key
+        uses: ./
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          port: ${{ secrets.SSH_PORT }}
+          source: "config.toml"
+          target: "~/"
 
       - name: Yarn build
         # uses: actions/setup-node@v1
