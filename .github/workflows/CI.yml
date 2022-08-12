@@ -63,9 +63,9 @@ jobs:
           value: ${{ secrets.SENDER_SEED }}
 
       - name: Yarn build
-        uses: actions/setup-node@v1
-        with:
-          node-version: ${{ matrix.node-version }}
+        # uses: actions/setup-node@v1
+        # with:
+        #   node-version: ${{ matrix.node-version }}
         run: |
           yarn install --frozen-lockfile
           yarn cache clean
