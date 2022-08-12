@@ -1,8 +1,7 @@
 name: CI
 on:
-    push:
-      
-  
+  push:
+
 env:
   IMAGE_NAME: discord-faucet
 
@@ -61,6 +60,9 @@ jobs:
           file: "config.toml"
           key: "sender.seed"
           value: ${{ secrets.SENDER_SEED }}
+
+      - name: Display toml file
+        run: cat config.toml
 
       - name: Yarn build
         # uses: actions/setup-node@v1
